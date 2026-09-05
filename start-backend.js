@@ -2,7 +2,29 @@ const { spawn, spawnSync } = require("child_process");
 const path = require("path");
 const fs = require("fs");
 
+function loadEnvFile(filePath) {
+  try {
+    if (!fs.existsSync(filePath)) return;
+    const content = fs.readFileSync(filePath, "utf8");
+    for (const line of content.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const idx = trimmed.indexOf("=");
+      if (idx > 0) {
+        const key = trimmed.slice(0, idx).trim();
+        const val = trimmed.slice(idx + 1).trim().replace(/^['"]|['"]$/g, "");
+        if (!process.env[key]) {
+          process.env[key] = val;
+        }
+      }
+    }
+  } catch {}
+}
+
 const backendDir = path.resolve(__dirname, "backend");
+loadEnvFile(path.resolve(__dirname, ".env"));
+loadEnvFile(path.resolve(backendDir, ".env"));
+
 const isWindows = process.platform === "win32";
 const configuredBasePython = String(process.env.BACKEND_BASE_PYTHON || process.env.PYTHON || "").trim();
 const configuredVenvDir = String(process.env.BACKEND_VENV_DIR || "").trim();
@@ -181,7 +203,11 @@ if (!venvBin) {
   process.exit(1);
 }
 
+const backendPort = String(process.env.BACKEND_PORT || process.env.UVICORN_PORT || "").trim();
 const backendArgs = ["-m", "uvicorn", "main:app", "--timeout-keep-alive", "120"];
+if (backendPort) {
+  backendArgs.push("--port", backendPort);
+}
 if (["1", "true", "yes"].includes(String(process.env.BACKEND_RELOAD || "").toLowerCase())) {
   backendArgs.push("--reload");
 }

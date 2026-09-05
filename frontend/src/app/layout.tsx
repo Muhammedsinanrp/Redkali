@@ -14,8 +14,8 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'WORLDVIEW // ORBITAL TRACKING',
-  description: 'Advanced Geopolitical Risk Dashboard',
+  title: 'REDKALI // GLOBAL THREAT INTERCEPT',
+  description: 'Redkali — Real-Time Geospatial Intelligence & Global Threat Intercept Platform',
 };
 
 // The dashboard is a live local runtime, not a static landing page. If Next

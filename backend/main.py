@@ -2926,7 +2926,7 @@ async def lifespan(app: FastAPI):
         pass
 
 
-app = FastAPI(title="Live Risk Dashboard API", lifespan=lifespan)
+app = FastAPI(title="Redkali Threat Intercept API", lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 

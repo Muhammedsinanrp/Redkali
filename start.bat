@@ -1,8 +1,8 @@
 @echo off
-title ShadowBroker - Global Threat Intercept
+title Redkali - Global Threat Intercept
 
 echo ===================================================
-echo     S H A D O W B R O K E R   --   STARTUP
+echo         R E D K A L I   --   STARTUP
 echo ===================================================
 echo.
 
@@ -73,12 +73,20 @@ if %errorlevel% neq 0 (
 
 for /f "tokens=1 delims= " %%v in ('node --version 2^>^&1') do echo [*] Found Node.js %%v
 
+:: Load BACKEND_PORT from .env if present
+set "BACKEND_PORT=8000"
+if exist "%ROOT%\.env" (
+    for /f "usebackq tokens=1,* delims==" %%A in ("%ROOT%\.env") do (
+        if /I "%%A"=="BACKEND_PORT" set "BACKEND_PORT=%%B"
+    )
+)
+
 :: ── AGGRESSIVE ZOMBIE CLEANUP ──────────────────────────────────────
 echo.
 echo [*] Clearing zombie processes...
 
 :: Kill by port — catches processes in ANY state, not just LISTENING
-for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":8000 "') do (
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":%BACKEND_PORT% "') do (
     taskkill /F /PID %%a >nul 2>&1
 )
 for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":3000 "') do (
@@ -92,9 +100,9 @@ for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":8787 "') do (
 timeout /t 1 /nobreak >nul
 
 :: Verify ports are actually free
-netstat -ano | findstr ":8000 " | findstr "LISTENING" >nul 2>&1
+netstat -ano | findstr ":%BACKEND_PORT% " | findstr "LISTENING" >nul 2>&1
 if %errorlevel% equ 0 (
-    echo [!] WARNING: Port 8000 is still occupied! Waiting 3s for OS cleanup...
+    echo [!] WARNING: Port %BACKEND_PORT% is still occupied! Waiting 3s for OS cleanup...
     timeout /t 3 /nobreak >nul
 )
 netstat -ano | findstr ":3000 " | findstr "LISTENING" >nul 2>&1
@@ -307,11 +315,11 @@ echo ===================================================
 echo   (Press Ctrl+C to stop)
 echo.
 
-start "ShadowBroker Runtime" powershell.exe -NoProfile -ExecutionPolicy Bypass -NoExit -File "%ROOT%\scripts\run-windows-runtime.ps1" -Root "%ROOT%"
+start "Redkali Runtime" powershell.exe -NoProfile -ExecutionPolicy Bypass -NoExit -File "%ROOT%\scripts\run-windows-runtime.ps1" -Root "%ROOT%"
 exit /b 0
 
 echo.
 echo ===================================================
-echo   ShadowBroker has stopped. Check errors above.
+echo   Redkali has stopped. Check errors above.
 echo ===================================================
 pause
