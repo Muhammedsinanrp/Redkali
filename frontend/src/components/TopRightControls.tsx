@@ -13,7 +13,9 @@ import {
   Terminal,
   Server,
   Copy,
+  Globe,
 } from 'lucide-react';
+import OsirisLauncherModal from '@/components/OsirisLauncherModal';
 import { API_BASE } from '@/lib/api';
 import { useTranslation } from '@/i18n';
 import { controlPlaneFetch } from '@/lib/controlPlane';
@@ -122,6 +124,7 @@ export default function TopRightControls({
   const [nodeToggleBusy, setNodeToggleBusy] = useState(false);
   const [nodeToggleError, setNodeToggleError] = useState('');
   const [terminalLauncherOpen, setTerminalLauncherOpen] = useState(false);
+  const [osirisLauncherOpen, setOsirisLauncherOpen] = useState(false);
   const [terminalLaunchBusy, setTerminalLaunchBusy] = useState(false);
   const [terminalLaunchError, setTerminalLaunchError] = useState('');
   const [terminalPrivateEnabled, setTerminalPrivateEnabled] = useState(false);
@@ -1138,6 +1141,10 @@ export default function TopRightControls({
     <>
     {terminalLauncherModal}
     {nodeLauncherModal}
+    <OsirisLauncherModal
+      isOpen={osirisLauncherOpen}
+      onClose={() => setOsirisLauncherOpen(false)}
+    />
     <div className="relative flex items-center gap-1.5 mb-1 w-full">
       {/* Node runtime / private lane */}
       <button
@@ -1169,6 +1176,18 @@ export default function TopRightControls({
             {(dmCount ?? 0) > 9 ? '9+' : dmCount}
           </span>
         )}
+      </button>
+
+      {/* OSIRIS Intelligence Platform Toggle */}
+      <button
+        type="button"
+        onClick={() => setOsirisLauncherOpen(true)}
+        className={`relative ${btnBase}`}
+        title="Launch OSIRIS Platform (osirisai.live)"
+      >
+        <Globe size={11} className="text-cyan-400" />
+        <span className="tracking-wider">{t('controls.osiris')}</span>
+        <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-emerald-400 shadow-[0_0_5px_rgba(52,211,153,0.8)]" />
       </button>
 
       {/* ── Update Available → opens confirmation ── */}

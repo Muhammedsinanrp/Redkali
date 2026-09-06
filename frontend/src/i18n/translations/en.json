@@ -19,6 +19,7 @@
     "checkFailed": "CHECK FAILED",
     "node": "NODE",
     "terminal": "TERMINAL",
+    "osiris": "OSIRIS",
     "coordinates": "COORDINATES",
     "location": "LOCATION",
     "style": "STYLE",
@@ -350,5 +351,15 @@
     "translatedFrom": "Translated from {lang}",
     "showOriginal": "SHOW ORIGINAL ({lang})",
     "showTranslation": "SHOW TRANSLATION"
+  },
+  "osiris": {
+    "title": "OSIRIS // GLOBAL OSINT",
+    "badge": "EXTERNAL NODE",
+    "subtitle": "3D Geospatial Intelligence & In-Browser Recon Platform",
+    "status": "SERVICE ONLINE // READY TO INTERCEPT",
+    "launchTab": "LAUNCH OSIRIS (NEW TAB)",
+    "launchPopout": "OPEN POP-OUT WINDOW",
+    "documentation": "VIEW OSIRIS DOCS",
+    "close": "CLOSE"
   }
 }
